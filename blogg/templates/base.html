@@ -18,6 +18,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
         {# Global stylesheets #}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
         <link rel="stylesheet" type="text/css" href="{% static 'css/blogg.css' %}">
 
         {% block extra_css %}
@@ -25,10 +26,20 @@
         {% endblock %}
     </head>
 
-    <body class="{% block body_class %}{% endblock %}">
+    <body>
         {% wagtailuserbar %}
 
+        <div>
+          <a href="/">BLOGG</a> navbar
+        </div>
+
+        <div class="container is-fullhd">
         {% block content %}{% endblock %}
+        </div>
+
+        <div>
+          footer
+        </div>
 
         {# Global javascript #}
         <script type="text/javascript" src="{% static 'js/blogg.js' %}"></script>

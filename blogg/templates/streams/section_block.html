@@ -1,0 +1,19 @@
+{% load wagtailcore_tags %}
+
+{% block extra_css %}
+<style>
+  ol, ul {
+    margin-left: 1em;
+    list-style-position: inside;
+  }
+
+  div.section {
+    padding: 1em;
+  }
+</style>
+{% endblock %}
+
+<div class='section'>
+  <h1 class='title'>{{ self.title }}</h1>
+  <div>{{ self.body|richtext }}</div>
+</div>

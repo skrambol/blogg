@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+
+{% block extra_css %}
+<style>
+  div.box {
+    box-shadow: none;
+  }
+
+  span {
+    display: block;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class='box'>
+  <h1 class='title is-1 has-text-centered'>{{ page.title }}</h1>
+  <p class='has-text-centered'>{{ page.first_published_at }}</p>
+  {% if self.is_modified %}
+    <span class='has-text-centered is-italic'>Last updated: {{ page.last_published_at }}</span>
+  {% endif %}
+  {% for block in page.content %}
+    {% include_block block %}
+  {% endfor %}
+</div>
+{% endblock content %}

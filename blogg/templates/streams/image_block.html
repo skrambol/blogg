@@ -1,0 +1,20 @@
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+
+{% block extra_css %}
+{% endblock %}
+
+{% image self.image original as img%}
+
+<div class='section'>
+  <div class='level'>
+    <div class='level-item'>
+      <img class='image' {{ img.attrs }}>
+    </div>
+  </div>
+  <div class='level'>
+    <div class='level-item'>
+      <span class='img-alt'>{{img.alt}}</span>
+    </div>
+  </div>
+</div>

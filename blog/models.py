@@ -5,6 +5,7 @@ from wagtail.admin.edit_handlers import FieldPanel, StreamFieldPanel
 from taggit.models import TaggedItemBase
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
 from streams import blocks
 
@@ -27,6 +28,16 @@ class BlogIndexPage(Page):
 
         if tags:
             posts = posts.filter(tags__slug__in=[tags])
+
+        paginator = Paginator(posts, 3)
+        page = request.GET.get('page')
+
+        try:
+            posts = paginator.page(page)
+        except PageNotAnInteger:
+            posts = paginator.page(1)
+        except EmptyPage:
+            posts = paginator.page(paginator.num_pages)
 
         context['posts'] = posts
 

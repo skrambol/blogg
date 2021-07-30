@@ -32,10 +32,6 @@
   #blog-footer p {
     margin-bottom: 1em;
   }
-
-  .tag a {
-    text-decoration: none;
-  }
 </style>
 {% endblock extra_css %}
 
@@ -57,7 +53,7 @@
     {% if page.tags.count > 0 %}
     <p>
         <span class='is-italic'>
-          Related tags:
+          Related tag(s):
         </span>
           {% for tag in page.tags.all %}
             <span class='tag'>

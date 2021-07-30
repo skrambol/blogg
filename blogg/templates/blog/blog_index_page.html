@@ -7,18 +7,25 @@
     box-shadow: none;
   }
 
-  .tag a {
-    text-decoration: none;
-    color: inherit;
+  .my-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  div.section {
+    min-width: 50vw;
   }
 </style>
 {% endblock extra_css %}
 
 {% block content %}
 <div class='box'>
+
   <h1 class='title is-1 has-text-centered'>
     <a href='{{ self.get_url }}'>{{ page.title }}</a>
   </h1>
+
   {% if request.GET.tag %}
     <p class='title is-5 has-text-centered'>
       Showing posts with
@@ -27,27 +34,47 @@
         </span>
     </p>
   {% endif %}
-  {% for post in posts %}
-    <div class='section'>
-      <h1 class='title'>
-        <a href="{{ post.specific.get_url }}">{{post.specific.title}}</a>
-      </h1>
-      <div class='columns'>
-        <p class='column'>{{post.specific.last_published_at}}</p>
-        <p class='column has-text-right'>
-          {% for tag in post.specific.tags.all %}
-            <span class='tag'>
-              <a href='{{ self.get_url }}?tag={{ tag.slug }}'>{{tag}}</a>
-            </span>
-          {% endfor %}
-        </p>
+
+  <div id='blog-list'>
+    {% for post in posts %}
+      <div class='section'>
+        <h1 class='title'>
+          <a href="{{ post.specific.get_url }}">{{post.specific.title}}</a>
+        </h1>
+        <div class='columns'>
+          <p class='column'>{{post.specific.last_published_at}}</p>
+          {% if post.specific.tags.count > 0 %}
+            <p class='column has-text-right'>
+              {% for tag in post.specific.tags.all %}
+                <span class='tag'>
+                  <a href='{{ self.get_url }}?tag={{ tag.slug }}'>{{tag}}</a>
+                </span>
+              {% endfor %}
+            </p>
+          {% endif %}
+        </div>
       </div>
-    </div>
-  {% endfor %}
+    {% endfor %}
+  </div>
+
   {% if request.GET.tag %}
     <p>
       <a href='{{ self.get_url }}'>Clear tags</a>
     </p>
   {% endif %}
+
+  {% if posts.paginator.num_pages > 1 %}
+    <div class='has-text-centered my-pagination'>
+      Page {{ posts.number }} of {{ posts.paginator.num_pages}}
+      &nbsp;
+      <a class='button' {% if posts.has_previous %} href='?page={{posts.previous_page_number}}&tag={{request.GET.tag}}' {% else %} disabled {% endif %}>
+        Prev
+      </a>
+      <a class='button' {% if posts.has_next %} href='?page={{posts.next_page_number}}&tag={{request.GET.tag}}' {% else %} disabled {% endif %}>
+        Next
+      </a>
+    </div>
+  {% endif %}
+
 </div>
 {% endblock content %}

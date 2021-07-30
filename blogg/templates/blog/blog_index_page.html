@@ -3,22 +3,67 @@
 
 {% block extra_css %}
 <style>
-  div.box {
-    box-shadow: none;
+  .my-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 </style>
 {% endblock extra_css %}
 
 {% block content %}
 <div class='box'>
-  <h1 class='title is-1 has-text-centered'>{{ page.title }}</h1>
-  {% for post in posts %}
-    <div class='section'>
-      <h1 class='title'>
-        <a href="{{ post.specific.get_url }}">{{post.specific.title}}</a>
-      </h1>
-      <p>{{post.specific.last_published_at}}</p>
+
+  <h1 class='title is-1 has-text-centered'>
+    <a href='{{ self.get_url }}'>{{ page.title }}</a>
+  </h1>
+
+  {% if request.GET.tag %}
+    <p class='has-text-centered'>
+      Showing posts with
+        <span class='tag is-medium'>
+          {{ request.GET.tag }}
+        </span>
+      <span class='has-text-centered is-size-7'>
+        <a href='{{ self.get_url }}'>(Clear tags)</a>
+      </span>
+    </p>
+  {% endif %}
+
+  <div id='blog-list'>
+    {% for post in posts %}
+      <div class='section blog-details'>
+        <h1 class='title'>
+          <a href="{{ post.specific.get_url }}">{{post.specific.title}}</a>
+        </h1>
+        <div class='columns'>
+          <p class='column'>{{post.specific.last_published_at}}</p>
+          {% if post.specific.tags.count > 0 %}
+            <p class='column has-text-right'>
+              {% for tag in post.specific.tags.all %}
+                <span class='tag'>
+                  <a href='{{ self.get_url }}?tag={{ tag.slug }}'>{{tag}}</a>
+                </span>
+              {% endfor %}
+            </p>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  {% if posts.paginator.num_pages > 1 %}
+    <div class='has-text-centered my-pagination'>
+      Page {{ posts.number }} of {{ posts.paginator.num_pages}}
+      &nbsp;
+      <a class='button' {% if posts.has_previous %} href='?page={{posts.previous_page_number}}&tag={{request.GET.tag}}' {% else %} disabled {% endif %}>
+        Prev
+      </a>
+      <a class='button' {% if posts.has_next %} href='?page={{posts.next_page_number}}&tag={{request.GET.tag}}' {% else %} disabled {% endif %}>
+        Next
+      </a>
     </div>
-  {% endfor %}
+  {% endif %}
+
 </div>
 {% endblock content %}

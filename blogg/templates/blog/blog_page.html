@@ -3,10 +3,6 @@
 
 {% block extra_css %}
 <style>
-  div.box {
-    box-shadow: none;
-  }
-
   .is-modified {
     display: block;
   }
@@ -15,35 +11,56 @@
     padding: 1em;
   }
 
-  #blog-body {
-    margin-top: 3em;
-  }
-
   .section-body ol, .section-body ul {
     margin-left: 1em;
     list-style-position: inside;
   }
 
-  #goto-index {
-    margin-top: 1em;
+  img.image {
+    max-height: 70vh;
+    width: auto;
+  }
+
+  #blog-footer {
+    margin-top: 2em;
+  }
+
+  #blog-footer p {
+    margin-bottom: 1em;
   }
 </style>
 {% endblock extra_css %}
 
 {% block content %}
-<div class='box'>
+<div class='box blog-details'>
   <h1 class='title is-1 has-text-centered'>{{ page.title }}</h1>
   <p class='has-text-centered'>{{ page.first_published_at }}</p>
   {% if self.is_modified %}
+  <div class='content'>
     <span class='is-modified has-text-centered is-italic'>Last updated: {{ page.last_published_at }}</span>
+  </div>
   {% endif %}
   <div id='blog-body'>
     {% for block in page.content %}
       {% include_block block %}
     {% endfor %}
   </div>
-  <p id='goto-index'>
-    <a href='{{ page.get_parent.get_url }}'>Back to Blogg Index</a>
-  </p>
+  <div id='blog-footer'>
+    {% if page.tags.count > 0 %}
+    <p>
+        <span class='is-italic'>
+          Related tag(s):
+        </span>
+          {% for tag in page.tags.all %}
+            <span class='tag'>
+              <a href='{{ page.get_parent.url }}?tag={{ tag.slug }}'>{{tag}}</a>
+            </span>
+          {% endfor %}
+    </p>
+    {% endif %}
+    <p id='goto-index'>
+      <a href='{{ page.get_parent.get_url }}'>⟵ Back to Blogg Index</a>
+    </p>
+  </div>
 </div>
 {% endblock content %}

@@ -7,21 +7,43 @@
     box-shadow: none;
   }
 
-  span {
+  .is-modified {
     display: block;
   }
+
+  div.section {
+    padding: 1em;
+  }
+
+  #blog-body {
+    margin-top: 3em;
+  }
+
+  .section-body ol, .section-body ul {
+    margin-left: 1em;
+    list-style-position: inside;
+  }
+
+  #goto-index {
+    margin-top: 1em;
+  }
 </style>
-{% endblock %}
+{% endblock extra_css %}
 
 {% block content %}
 <div class='box'>
   <h1 class='title is-1 has-text-centered'>{{ page.title }}</h1>
   <p class='has-text-centered'>{{ page.first_published_at }}</p>
   {% if self.is_modified %}
-    <span class='has-text-centered is-italic'>Last updated: {{ page.last_published_at }}</span>
+    <span class='is-modified has-text-centered is-italic'>Last updated: {{ page.last_published_at }}</span>
   {% endif %}
-  {% for block in page.content %}
-    {% include_block block %}
-  {% endfor %}
+  <div id='blog-body'>
+    {% for block in page.content %}
+      {% include_block block %}
+    {% endfor %}
+  </div>
+  <p id='goto-index'>
+    <a href='{{ page.get_parent.get_url }}'>Back to Blogg Index</a>
+  </p>
 </div>
 {% endblock content %}

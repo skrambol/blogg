@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+
+{% block extra_css %}
+<style>
+  div.box {
+    box-shadow: none;
+  }
+</style>
+{% endblock extra_css %}
+
+{% block content %}
+<div class='box'>
+  <h1 class='title is-1 has-text-centered'>{{ page.title }}</h1>
+  {% for post in posts %}
+    <div class='section'>
+      <h1 class='title'>
+        <a href="{{ post.specific.get_url }}">{{post.specific.title}}</a>
+      </h1>
+      <p>{{post.specific.last_published_at}}</p>
+    </div>
+  {% endfor %}
+</div>
+{% endblock content %}

@@ -6,19 +6,48 @@
   div.box {
     box-shadow: none;
   }
+
+  .tag a {
+    text-decoration: none;
+    color: inherit;
+  }
 </style>
 {% endblock extra_css %}
 
 {% block content %}
 <div class='box'>
-  <h1 class='title is-1 has-text-centered'>{{ page.title }}</h1>
+  <h1 class='title is-1 has-text-centered'>
+    <a href='{{ self.get_url }}'>{{ page.title }}</a>
+  </h1>
+  {% if request.GET.tag %}
+    <p class='title is-5 has-text-centered'>
+      Showing posts with
+        <span class='tag is-medium'>
+          {{ request.GET.tag }}
+        </span>
+    </p>
+  {% endif %}
   {% for post in posts %}
     <div class='section'>
       <h1 class='title'>
         <a href="{{ post.specific.get_url }}">{{post.specific.title}}</a>
       </h1>
-      <p>{{post.specific.last_published_at}}</p>
+      <div class='columns'>
+        <p class='column'>{{post.specific.last_published_at}}</p>
+        <p class='column has-text-right'>
+          {% for tag in post.specific.tags.all %}
+            <span class='tag'>
+              <a href='{{ self.get_url }}?tag={{ tag.slug }}'>{{tag}}</a>
+            </span>
+          {% endfor %}
+        </p>
+      </div>
     </div>
   {% endfor %}
+  {% if request.GET.tag %}
+    <p>
+      <a href='{{ self.get_url }}'>Clear tags</a>
+    </p>
+  {% endif %}
 </div>
 {% endblock content %}

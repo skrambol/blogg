@@ -7,7 +7,7 @@ class SectionBlock(blocks.StructBlock):
         'superscript', 'subscript', 'strikethrough' 'blockquote'
     ]
     title = blocks.CharBlock(required=False)
-    body = blocks.RichTextBlock(required=True, features=feats)
+    body = blocks.RichTextBlock(required=True, features=feats, help_text='Tip: Use the "line break" button to retain new line formatting in post')
 
     class Meta:
         template = 'streams/section_block.html'

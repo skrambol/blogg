@@ -6,7 +6,17 @@ from wagtail.admin.edit_handlers import StreamFieldPanel
 from streams import blocks
 
 class BlogIndexPage(Page):
-    max_count = 1
+
+    parent_page_types = ['home.HomePage']
+    subpage_types = ['blog.BlogPage']
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        posts = BlogPage.objects.live().public().order_by('-last_published_at')
+
+        context['posts'] = posts
+
+        return context;
 
 class BlogPage(Page):
     content = StreamField(
@@ -22,6 +32,9 @@ class BlogPage(Page):
     content_panels = Page.content_panels + [
         StreamFieldPanel('content')
     ]
+
+    parent_page_types = ['blog.BlogIndexPage']
+    subpage_types = []
 
     @property
     def is_modified(self):

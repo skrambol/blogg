@@ -3,18 +3,10 @@
 
 {% block extra_css %}
 <style>
-  div.box {
-    box-shadow: none;
-  }
-
   .my-pagination {
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-
-  div.section {
-    min-width: 50vw;
   }
 </style>
 {% endblock extra_css %}
@@ -27,17 +19,20 @@
   </h1>
 
   {% if request.GET.tag %}
-    <p class='title is-5 has-text-centered'>
+    <p class='has-text-centered'>
       Showing posts with
         <span class='tag is-medium'>
           {{ request.GET.tag }}
         </span>
+      <span class='has-text-centered is-size-7'>
+        <a href='{{ self.get_url }}'>(Clear tags)</a>
+      </span>
     </p>
   {% endif %}
 
   <div id='blog-list'>
     {% for post in posts %}
-      <div class='section'>
+      <div class='section blog-details'>
         <h1 class='title'>
           <a href="{{ post.specific.get_url }}">{{post.specific.title}}</a>
         </h1>
@@ -56,12 +51,6 @@
       </div>
     {% endfor %}
   </div>
-
-  {% if request.GET.tag %}
-    <p>
-      <a href='{{ self.get_url }}'>Clear tags</a>
-    </p>
-  {% endif %}
 
   {% if posts.paginator.num_pages > 1 %}
     <div class='has-text-centered my-pagination'>
